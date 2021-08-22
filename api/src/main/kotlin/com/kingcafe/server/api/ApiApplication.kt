@@ -1,11 +1,11 @@
-package com.example.kingcafe
+package com.kingcafe.server.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class KingCafeApplication
+class ApiApplication
 
 fun main(args: Array<String>) {
-    runApplication<KingCafeApplication>(*args)
+    runApplication<ApiApplication>(*args)
 }
