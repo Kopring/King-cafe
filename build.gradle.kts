@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     id("org.springframework.boot") version "2.5.4"
@@ -9,9 +10,12 @@ plugins {
     kotlin("plugin.jpa") version "1.5.21"
 }
 
-group = "com.example"
+apply(plugin = "io.spring.dependency-management")
+
+group = "com.kingcafe.server"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
 
 repositories {
     mavenCentral()
@@ -36,11 +40,9 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
 
-val snippetsDir = file("build/generated-snippets")
-
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
         jvmTarget = "11"
     }
 }
@@ -49,11 +51,25 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+val snppetsDir = file("build/generated-snippets")
+
+
 tasks.test {
-    outputs.dir(snippetsDir)
+    outputs.dir(snppetsDir)
 }
 
 tasks.asciidoctor {
-    inputs.dir(snippetsDir)
-    dependsOn("test")
+    inputs.dir(snppetsDir)
+    dependsOn(tasks.test)
+}
+
+tasks.register("copyHTML", Copy::class) {
+    dependsOn(tasks.findByName("asciidoctor"))
+    from(file("build/asciidoc/html5"))
+    into(file("src/main/resources/static/docs"))
+}
+
+tasks.bootJar {
+    dependsOn(tasks.asciidoctor)
+    dependsOn(tasks.getByName("copyHTML"))
 }
