@@ -1,2 +1,0 @@
-# King-cafe
-Kopring onboarding
