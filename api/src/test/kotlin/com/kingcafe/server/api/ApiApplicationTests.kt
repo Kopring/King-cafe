@@ -1,10 +1,10 @@
-package com.example.kingcafe
+package com.kingcafe.server.api
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class KingCafeApplicationTests {
+class ApiApplicationTests {
 
     @Test
     fun contextLoads() {
